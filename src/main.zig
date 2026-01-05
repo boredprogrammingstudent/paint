@@ -1,12 +1,9 @@
 const raylib = @import("c.zig").raylib;
-const BG = @import("bg.zig");
 const Matrix = @import("matrix.zig");
-const Tile = @import("tile.zig");
-const Camera = @import("camera.zig");
-const Window = @import("window.zig");
 const Assets = @import("assets.zig");
-const ColorPicker = @import("color_picker.zig");
-const ColorPalette = @import("color_palette.zig");
+const Window = @import("window.zig");
+const Scene = @import("scene.zig");
+const DrawingInterface = @import("drawing_interface.zig");
 pub fn main() !void {
     const window: Window = .{ .width = 1920, .height = 1080 };
     raylib.InitWindow(window.width, window.height, "paint");
@@ -16,39 +13,13 @@ pub fn main() !void {
     try assets.load();
     defer assets.unload();
 
-    var matrix: Matrix = undefined;
-    initMatrix(&matrix, 16, 16);
-    var camera: Camera = .{ .width = 1024, .height = 512, .x = 0, .y = 0, .zoom = 10, .speed = 40 };
-    var bg: BG = .{ .color = raylib.LIGHTGRAY };
-    var palette: ColorPalette = ColorPalette.default();
-    var selected_color: raylib.Color = palette.pickers[0].color;
+    const drawing_interface = DrawingInterface.init();
 
     while (!raylib.WindowShouldClose()) {
-        camera.checkInput();
-        matrix.checkInput(&camera, &selected_color);
-        palette.checkInput(&window, &selected_color);
-
+        drawing_interface.scene.update(&window, &assets);
         raylib.BeginDrawing();
         defer raylib.EndDrawing();
-
-        raylib.ClearBackground(bg.color);
-        camera.drawRegion(&assets);
-        for (0..matrix.width) |i| {
-            for (0..matrix.height) |j| {
-                matrix.tiles[i][j].draw(&camera);
-            }
-        }
-        palette.draw(&window);
+        drawing_interface.scene.draw(&window, &assets);
     }
-    try @import("tga.zig").encode(&matrix);
-}
-
-fn initMatrix(matrix: *Matrix, width: u16, height: u16) void {
-    matrix.width = width;
-    matrix.height = height;
-    for (0..width) |i| {
-        for (0..height) |j| {
-            matrix.tiles[i][j] = .{ .color = raylib.SKYBLUE, .x = @intCast(i), .y = @intCast(j) };
-        }
-    }
+    try @import("tga.zig").encode(drawing_interface.getMatrix());
 }

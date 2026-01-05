@@ -15,3 +15,15 @@ pub fn checkInput(self: *@This(), camera: *Camera, color: *const raylib.Color) v
         self.tiles[@intCast(x)][@intCast(y)].color = color.*;
     }
 }
+
+pub fn init(width: u16, height: u16) @This() {
+    var matrix: @This() = undefined;
+    matrix.width = width;
+    matrix.height = height;
+    for (0..width) |i| {
+        for (0..height) |j| {
+            matrix.tiles[i][j] = .{ .color = raylib.SKYBLUE, .x = @intCast(i), .y = @intCast(j) };
+        }
+    }
+    return matrix;
+}
