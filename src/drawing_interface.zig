@@ -6,7 +6,7 @@ const Scene = @import("scene.zig");
 const Assets = @import("assets.zig");
 const Window = @import("window.zig");
 
-pub var matrix: Matrix = Matrix.init(16, 16);
+pub var matrix: Matrix = Matrix.init(32, 32);
 pub var bg: BG = .{ .color = raylib.LIGHTGRAY };
 pub var palette: ColorPalette = ColorPalette.default();
 pub var selected_color = raylib.BLACK;
