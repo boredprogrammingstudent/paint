@@ -20,6 +20,7 @@ pub fn update(self: *@This()) void {
 }
 
 pub fn draw(self: *@This()) void {
-    raylib.DrawRectangle(@intCast(self.x), @intCast(self.y), @intCast(self.width), @intCast(self.height), self.color);
-    raylib.DrawText(self.text, @intCast(self.x - self.width), @intCast(self.y), @intCast(self.height), raylib.BLACK);
+    raylib.DrawRectangle(@intCast(self.x), @intCast(self.y), @intCast(self.width), @intCast(self.height), raylib.BLACK);
+    raylib.DrawRectangle(@intCast(self.x), @intCast(self.y), @intCast(self.width - 2), @intCast(self.height - 2), self.color);
+    raylib.DrawText(self.text, @intCast(self.x), @intCast(self.y), @intCast(self.height / 2), raylib.BLACK);
 }
