@@ -17,13 +17,13 @@ pub fn init() @This() {
     return .{ .scene = .{ .vtable = &.{ .draw = @This().draw, .update = @This().update } } };
 }
 
-pub fn update(window: *const Window, assets: *Assets) void {
+fn update(window: *const Window, assets: *Assets) void {
     matrix.checkInput(window, &selected_color);
     palette.checkInput(window, &selected_color);
     _ = assets;
 }
 
-pub fn draw(window: *const Window, assets: *Assets) void {
+fn draw(window: *const Window, assets: *Assets) void {
     raylib.ClearBackground(bg.color);
 
     matrix.draw(window);
